@@ -6,6 +6,7 @@ import { tutorController } from "./tutor.controller";
 const router = Router();
 
 // Public routes
+router.post("/",auth(UserRole.TUTOR), tutorController.createTutorProfile)
 router.get("/", tutorController.getAllTutors);           
 router.get("/:id", tutorController.getTutorById);       
 
