@@ -44,12 +44,40 @@ const getMyBookings = async (req: Request, res: Response) => {
 };
 
 
+// GET /api/bookings/:id
+const getBookingById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user!.id;
+    const userRole = req.user!.role;
+
+    if (!id || typeof id !== "string") {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid booking id",
+      });
+    }
+
+    const booking = await bookingService.getBookingById(id, userId, userRole);
+
+    res.json({
+      success: true,
+      data: booking,
+    });
+  } catch (error: any) {
+    res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 
 
 export const bookingController = {
   createBooking,
   getMyBookings,
-//   getBookingById,
+  getBookingById,
 //   markBookingComplete,
 //   cancelBooking,
 };

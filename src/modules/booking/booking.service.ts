@@ -145,11 +145,67 @@ const getMyBookings = async (userId: string, userRole: string, status?: string) 
 };
 
 
+const getBookingById = async (bookingId: string, userId: string, userRole: string) => {
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: {
+      student: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+        },
+      },
+      tutor: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              image: true,
+            },
+          },
+        },
+      },
+      review: true,
+    },
+  });
+
+  if (!booking) {
+    throw new Error("Booking not found");
+  }
+
+  // Check if user has access to this booking
+  let hasAccess = false;
+
+  if (userRole === "STUDENT" && booking.studentId === userId) {
+    hasAccess = true;
+  } else if (userRole === "TUTOR") {
+    const tutorProfile = await prisma.tutorProfile.findUnique({
+      where: { userId },
+    });
+    if (tutorProfile && booking.tutorId === tutorProfile.id) {
+      hasAccess = true;
+    }
+  } else if (userRole === "ADMIN") {
+    hasAccess = true;
+  }
+
+  if (!hasAccess) {
+    throw new Error("You do not have permission to view this booking");
+  }
+
+  return booking;
+};
+
+
 
 export const bookingService = {
   createBooking,
   getMyBookings,
-//   getBookingById,
+  getBookingById,
 //   markComplete,
 //   cancelBooking,
 };

@@ -9,7 +9,7 @@ const router = Router();
 router.get("/", auth(UserRole.STUDENT, UserRole.TUTOR, UserRole.ADMIN), bookingController.getMyBookings);   //OK
 
 // // নির্দিষ্ট বুকিং ডিটেইলস দেখা
-// router.get("/:id", auth(UserRole.STUDENT, UserRole.TUTOR, UserRole.ADMIN), bookingController.getBookingById);
+router.get("/:id", auth(UserRole.STUDENT, UserRole.TUTOR, UserRole.ADMIN), bookingController.getBookingById);
 
 // only student booking tutor
 router.post("/", auth(UserRole.STUDENT), bookingController.createBooking); //ok
