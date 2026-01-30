@@ -5,8 +5,8 @@ import { bookingController } from "./booking.controller";
 
 const router = Router();
 
-// // সব রোলের ইউজাররাই (Student, Tutor, Admin) তাদের বুকিং লিস্ট দেখতে পারবে
-// router.get("/", auth(UserRole.STUDENT, UserRole.TUTOR, UserRole.ADMIN), bookingController.getMyBookings);
+// // all user(Student, Tutor, Admin)self booking list
+router.get("/", auth(UserRole.STUDENT, UserRole.TUTOR, UserRole.ADMIN), bookingController.getMyBookings);   //OK
 
 // // নির্দিষ্ট বুকিং ডিটেইলস দেখা
 // router.get("/:id", auth(UserRole.STUDENT, UserRole.TUTOR, UserRole.ADMIN), bookingController.getBookingById);

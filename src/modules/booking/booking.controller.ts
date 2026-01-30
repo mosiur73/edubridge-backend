@@ -22,14 +22,33 @@ const createBooking = async (req: Request, res: Response) => {
   }
 };
 
+// GET /api/bookings
+const getMyBookings = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user!.id;
+    const userRole = req.user!.role;
+    const { status } = req.query;
 
+    const bookings = await bookingService.getMyBookings(userId, userRole, status as string);
+
+    res.json({
+      success: true,
+      data: bookings,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 
 
 
 export const bookingController = {
   createBooking,
-//   getMyBookings,
+  getMyBookings,
 //   getBookingById,
 //   markBookingComplete,
 //   cancelBooking,
