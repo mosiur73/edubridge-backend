@@ -11,7 +11,7 @@ router.get("/profile/me", auth(UserRole.TUTOR), tutorController.getMyProfile);  
 router.post("/profile", auth(UserRole.TUTOR), tutorController.createTutorProfile); //ok
 router.put("/profile", auth(UserRole.TUTOR), tutorController.updateTutorProfile);  //ok
 router.delete("/profile", auth(UserRole.TUTOR), tutorController.deleteTutorProfile);  //ok
-router.get("/sessions", auth(UserRole.TUTOR), tutorController.getTutorSessions);   //uncomplate
+router.get("/sessions", auth(UserRole.TUTOR), tutorController.getTutorSessions);   //ok
 router.get("/stats", auth(UserRole.TUTOR), tutorController.getTutorStats);  //uncomplate
 
 export const tutorRouter: Router = router;

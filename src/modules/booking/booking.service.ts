@@ -201,11 +201,147 @@ const getBookingById = async (bookingId: string, userId: string, userRole: strin
 };
 
 
+const markComplete = async (bookingId: string, userId: string) => {
+  // Get tutor profile
+  const tutorProfile = await prisma.tutorProfile.findUnique({
+    where: { userId },
+  });
+
+  if (!tutorProfile) {
+    throw new Error("Tutor profile not found");
+  }
+
+  // Get booking
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+  });
+
+  if (!booking) {
+    throw new Error("Booking not found");
+  }
+
+  // Check if booking belongs to this tutor
+  if (booking.tutorId !== tutorProfile.id) {
+    throw new Error("You do not have permission to update this booking");
+  }
+
+  // Check if booking is confirmed
+  if (booking.status !== "CONFIRMED") {
+    throw new Error("Only confirmed bookings can be marked as completed");
+  }
+
+  // Update booking status
+  const updatedBooking = await prisma.booking.update({
+    where: { id: bookingId },
+    data: { status: "COMPLETED" },
+    include: {
+      student: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+        },
+      },
+      tutor: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              image: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  // Update tutor's total sessions
+  await prisma.tutorProfile.update({
+    where: { id: tutorProfile.id },
+    data: { totalSessions: { increment: 1 } },
+  });
+
+  return updatedBooking;
+};
+
+
+const cancelBooking = async (bookingId: string, userId: string, userRole: string) => {
+  // Get booking
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+  });
+
+  if (!booking) {
+    throw new Error("Booking not found");
+  }
+
+  // Check permissions
+  let hasPermission = false;
+
+  if (userRole === "STUDENT" && booking.studentId === userId) {
+    hasPermission = true;
+  } else if (userRole === "TUTOR") {
+    const tutorProfile = await prisma.tutorProfile.findUnique({
+      where: { userId },
+    });
+    if (tutorProfile && booking.tutorId === tutorProfile.id) {
+      hasPermission = true;
+    }
+  }
+
+  if (!hasPermission) {
+    throw new Error("You do not have permission to cancel this booking");
+  }
+
+  // Check if booking can be cancelled
+  if (booking.status === "CANCELLED") {
+    throw new Error("Booking is already cancelled");
+  }
+
+  if (booking.status === "COMPLETED") {
+    throw new Error("Cannot cancel completed bookings");
+  }
+
+  // Update booking status
+  const updatedBooking = await prisma.booking.update({
+    where: { id: bookingId },
+    data: { status: "CANCELLED" },
+    include: {
+      student: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+        },
+      },
+      tutor: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              image: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return updatedBooking;
+};
+
+
 
 export const bookingService = {
   createBooking,
   getMyBookings,
   getBookingById,
-//   markComplete,
-//   cancelBooking,
+  markComplete,
+  cancelBooking,
 };

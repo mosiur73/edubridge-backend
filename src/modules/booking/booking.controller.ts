@@ -73,11 +73,55 @@ const getBookingById = async (req: Request, res: Response) => {
 };
 
 
+// PATCH /api/bookings/:id/complete
+const markBookingComplete = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user!.id;
+
+    const booking = await bookingService.markComplete(id as string, userId);
+
+    res.json({
+      success: true,
+      message: "Booking marked as completed",
+      data: booking,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+// PATCH /api/bookings/:id/cancel
+const cancelBooking = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user!.id;
+    const userRole = req.user!.role;
+
+    const booking = await bookingService.cancelBooking(id as string, userId, userRole);
+
+    res.json({
+      success: true,
+      message: "Booking cancelled successfully",
+      data: booking,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 
 export const bookingController = {
   createBooking,
   getMyBookings,
   getBookingById,
-//   markBookingComplete,
-//   cancelBooking,
+  markBookingComplete,
+  cancelBooking,
 };
