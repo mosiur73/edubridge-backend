@@ -1,177 +1,172 @@
 import { Request, Response } from "express";
 import { tutorService } from "./tutor.service";
 
-// POST /api/tutor/profile
-const createTutorProfile = async (req: Request, res: Response) => {
+// GET /api/tutors - Get all tutors with filters
+const getAllTutors = async (req: Request, res: Response) => {
+  try {
+    const { categoryId, minRate, maxRate, search, minRating } = req.query;
+
+    const filters: {
+      categoryId?: string;
+      minRate?: number;
+      maxRate?: number;
+      search?: string;
+      minRating?: number;
+    } = {};
+
+    if (categoryId) filters.categoryId = categoryId as string;
+    if (minRate) filters.minRate = parseFloat(minRate as string);
+    if (maxRate) filters.maxRate = parseFloat(maxRate as string);
+    if (search) filters.search = search as string;
+    if (minRating) filters.minRating = parseFloat(minRating as string);
+
+    const tutors = await tutorService.getAllTutors(filters);
+
+    res.status(200).json({
+      success: true,
+      data: tutors,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch tutors",
+    });
+  }
+};
+
+// GET /api/tutors/:id - Get single tutor by ID
+const getTutorById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const tutor = await tutorService.getTutorById(id as string);
+
+    res.status(200).json({
+      success: true,
+      data: tutor,
+    });
+  } catch (error: any) {
+    res.status(404).json({
+      success: false,
+      message: error.message || "Tutor not found",
+    });
+  }
+};
+
+// GET /api/tutor/profile - Get my tutor profile
+const getMyProfile = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user!.id;
+    const profile = await tutorService.getTutorProfileByUserId(userId);
+
+    if (!profile) {
+      return res.status(404).json({
+        success: false,
+        message: "Tutor profile not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: profile,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch profile",
+    });
+  }
+};
+
+// POST /api/tutor/profile - Create tutor profile
+const createProfile = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id;
     const payload = req.body;
 
-    const tutor = await tutorService.createTutorProfile(userId, payload);
+    const profile = await tutorService.createTutorProfile(userId, payload);
 
     res.status(201).json({
       success: true,
-      message: "Tutor profile created successfully",
-      data: tutor,
+      message: "Profile created successfully",
+      data: profile,
     });
   } catch (error: any) {
     res.status(400).json({
       success: false,
-      message: error.message,
+      message: error.message || "Failed to create profile",
     });
   }
 };
 
-// GET /api/tutor
-const getAllTutors = async (req: Request, res: Response) => {
-  try {
-    const filters = req.query;
-    const tutors = await tutorService.getAllTutors(filters);
-    
-    res.json({ 
-      success: true, 
-      data: tutors 
-    });
-  } catch (error: any) {
-    res.status(500).json({ 
-      success: false, 
-      message: "Server error", 
-      error: error.message 
-    });
-  }
-};
-
-// GET /api/tutor/:id
-const getTutorById = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-
-    if (!id || typeof id !== "string") {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid tutor id",
-      });
-    }
-
-    const tutor = await tutorService.getTutorById(id);
-    
-    res.json({ 
-      success: true, 
-      data: tutor 
-    });
-  } catch (error: any) {
-    res.status(500).json({ 
-      success: false, 
-      message: error.message 
-    });
-  }
-};
-
-// PUT /api/tutor/profile
-const updateTutorProfile = async (req: Request, res: Response) => {
+// PUT /api/tutor/profile - Update tutor profile
+const updateProfile = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id;
-    const data = req.body;
-    
-    const profile = await tutorService.updateProfile(userId, data);
-    
-    res.json({ 
-      success: true, 
+    const payload = req.body;
+
+    const updatedProfile = await tutorService.updateTutorProfile(
+      userId,
+      payload
+    );
+
+    res.status(200).json({
+      success: true,
       message: "Profile updated successfully",
-      data: profile 
+      data: updatedProfile,
     });
   } catch (error: any) {
-    res.status(500).json({ 
-      success: false, 
-      message: error.message 
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to update profile",
     });
   }
 };
 
-// DELETE /api/tutor/profile
-const deleteTutorProfile = async (req: Request, res: Response) => {
+// GET /api/tutor/stats - Get tutor statistics
+const getStats = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id;
-    
-    await tutorService.deleteProfile(userId);
-    
-    res.json({ 
-      success: true, 
-      message: "Profile deleted successfully" 
+    const stats = await tutorService.getTutorStats(userId);
+
+    res.status(200).json({
+      success: true,
+      data: stats,
     });
   } catch (error: any) {
-    res.status(500).json({ 
-      success: false, 
-      message: error.message 
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch stats",
     });
   }
 };
 
-// GET /api/tutor/profile
-const getMyProfile = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user!.id;
-    
-    const profile = await tutorService.getMyProfile(userId);
-    
-    res.json({ 
-      success: true, 
-      data: profile 
-    });
-  } catch (error: any) {
-    res.status(404).json({ 
-      success: false, 
-      message: error.message 
-    });
-  }
-};
-
-// GET /api/tutor/sessions
-const getTutorSessions = async (req: Request, res: Response) => {
+// GET /api/tutor/sessions - Get tutor sessions
+const getMySessions = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id;
     const { status } = req.query;
-    
-    const sessions = await tutorService.getSessions(userId, status as string);
-    
-    res.json({ 
-      success: true, 
-      data: sessions 
-    });
-  } catch (error: any) {
-    res.status(500).json({ 
-      success: false, 
-      message: error.message 
-    });
-  }
-};
 
-// GET /api/tutor/stats
-const getTutorStats = async (req: Request, res: Response) => {
-  try {
-    const userId = req.user!.id;
-    
-    const stats = await tutorService.getStats(userId);
-    
-    res.json({ 
-      success: true, 
-      data: stats 
+    const sessions = await tutorService.getTutorSessions(userId, status as string);
+
+    res.status(200).json({
+      success: true,
+      data: sessions,
     });
   } catch (error: any) {
-    res.status(500).json({ 
-      success: false, 
-      message: error.message 
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch sessions",
     });
   }
 };
 
 export const tutorController = {
-  createTutorProfile,
   getAllTutors,
   getTutorById,
-  updateTutorProfile,
-  deleteTutorProfile,
   getMyProfile,
-  getTutorSessions,
-  getTutorStats,
+  createProfile,
+  updateProfile,
+  getStats,
+  getMySessions,
 };
+

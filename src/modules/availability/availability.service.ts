@@ -188,39 +188,11 @@ const deleteAvailability = async (availabilityId: string, userId: string) => {
   return true;
 };
 
-const toggleAvailability = async (availabilityId: string, userId: string) => {
-  // Get availability slot
-  const slot = await prisma.availability.findUnique({
-    where: { id: availabilityId },
-    include: {
-      tutor: true,
-    },
-  });
-
-  if (!slot) {
-    throw new Error("Availability slot not found");
-  }
-
-  // Check if slot belongs to this tutor
-  if (slot.tutor.userId !== userId) {
-    throw new Error("You do not have permission to update this availability slot");
-  }
-
-  // Toggle isActive
-  const updatedSlot = await prisma.availability.update({
-    where: { id: availabilityId },
-    data: {
-      isActive: !slot.isActive,
-    },
-  });
-
-  return updatedSlot;
-};
 
 export const availabilityService = {
   createAvailability,
   getMyAvailability,
   updateAvailability,
-  deleteAvailability,
-  toggleAvailability,
+  deleteAvailability
+  
 };

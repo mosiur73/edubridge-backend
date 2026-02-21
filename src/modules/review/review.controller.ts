@@ -48,53 +48,10 @@ const getTutorReviews = async (req: Request, res: Response) => {
   }
 };
 
-// PUT /api/reviews/:id
-const updateReview = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
 
-
-    const studentId = req.user!.id;
-    const data = req.body;
-
-    const review = await reviewService.updateReview(id as string, studentId, data);
-
-    res.json({
-      success: true,
-      message: "Review updated successfully",
-      data: review,
-    });
-  } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-// DELETE /api/reviews/:id
-const deleteReview = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const studentId = req.user!.id;
-
-    await reviewService.deleteReview(id as string, studentId);
-
-    res.json({
-      success: true,
-      message: "Review deleted successfully",
-    });
-  } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
 
 export const reviewController = {
   createReview,
   getTutorReviews,
-  updateReview,
-  deleteReview,
+  
 };

@@ -83,31 +83,11 @@ const deleteAvailability = async (req: Request, res: Response) => {
   }
 };
 
-// PATCH /api/availability/:id/toggle
-const toggleAvailability = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const userId = req.user!.id;
-
-    const availability = await availabilityService.toggleAvailability(id as string, userId);
-
-    res.json({
-      success: true,
-      message: "Availability status toggled successfully",
-      data: availability,
-    });
-  } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
 
 export const availabilityController = {
   createAvailability,
   getMyAvailability,
   updateAvailability,
   deleteAvailability,
-  toggleAvailability,
+  
 };
