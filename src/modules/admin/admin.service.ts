@@ -76,6 +76,9 @@ const getAllUsers = async (filters: { role?: string; search?: string }) => {
       image: true,
       createdAt: true,
       emailVerified: true,
+      banned: true,
+      banReason: true,
+      banExpires: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -213,6 +216,86 @@ const updateCategory = async (
   });
 };
 
+// ✅ Ban a user
+const banUser = async (
+  userId: string,
+  data: { reason?: string; banExpires?: string }
+) => {
+  // Check if user exists
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Prevent banning an admin
+  if (user.role === "ADMIN") {
+    throw new Error("Cannot ban an admin user");
+  }
+
+  // Already banned check
+  if (user.banned) {
+    throw new Error("User is already banned");
+  }
+
+  const banExpiresDate = data.banExpires ? new Date(data.banExpires) : null;
+
+  return await prisma.user.update({
+    where: { id: userId },
+    data: {
+      banned: true,
+      banReason: data.reason || "Violated platform terms",
+      banExpires: banExpiresDate,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      banned: true,
+      banReason: true,
+      banExpires: true,
+    },
+  });
+};
+
+// ✅ Unban a user
+const unbanUser = async (userId: string) => {
+  // Check if user exists
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Already unbanned check
+  if (!user.banned) {
+    throw new Error("User is not banned");
+  }
+
+  return await prisma.user.update({
+    where: { id: userId },
+    data: {
+      banned: false,
+      banReason: null,
+      banExpires: null,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      banned: true,
+      banReason: true,
+      banExpires: true,
+    },
+  });
+};
+
 export const adminService = {
   getStats,
   getAllUsers,
@@ -220,4 +303,6 @@ export const adminService = {
   getAllCategories,
   createCategory,
   updateCategory,
+  banUser,
+  unbanUser,
 };

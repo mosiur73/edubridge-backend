@@ -12,6 +12,9 @@ router.get("/stats", adminController.getStats);
 
 // User management
 router.get("/users", adminController.getAllUsers);
+router.patch("/users/:id/ban", adminController.banUser);     // ✅ Ban user
+router.patch("/users/:id/unban", adminController.unbanUser); // ✅ Unban user
+
 
 // Bookings management
 router.get("/bookings", adminController.getAllBookings);

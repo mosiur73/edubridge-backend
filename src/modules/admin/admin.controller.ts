@@ -136,6 +136,61 @@ const updateCategory = async (req: Request, res: Response) => {
   }
 };
 
+// ✅ PATCH /api/admin/users/:id/ban - Ban a user
+const banUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { reason, banExpires } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    const user = await adminService.banUser(id as string, { reason, banExpires });
+
+    res.status(200).json({
+      success: true,
+      message: "User banned successfully",
+      data: user,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to ban user",
+    });
+  }
+};
+
+// ✅ PATCH /api/admin/users/:id/unban - Unban a user
+const unbanUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    const user = await adminService.unbanUser(id as string);
+
+    res.status(200).json({
+      success: true,
+      message: "User unbanned successfully",
+      data: user,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to unban user",
+    });
+  }
+};
+
 export const adminController = {
   getStats,
   getAllUsers,
@@ -143,4 +198,6 @@ export const adminController = {
   getAllCategories,
   createCategory,
   updateCategory,
+  banUser,
+  unbanUser,
 };
