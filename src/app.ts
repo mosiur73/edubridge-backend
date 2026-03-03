@@ -24,10 +24,10 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (like Postman, mobile apps)
+      
         if (!origin) return callback(null, true);
         
-        // Check if origin is in allowed list or matches pattern
+    //allow origin
         const isAllowed = allowedOrigins.some(allowed => origin === allowed) || 
                          origin?.includes('edubridge-client') && origin?.includes('vercel.app');
         
