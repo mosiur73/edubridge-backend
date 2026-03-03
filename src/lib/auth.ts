@@ -7,12 +7,11 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
 
-  // ✅ FIXED: Filter undefined values BEFORE passing to array
   trustedOrigins: [
     "http://localhost:3000",
     "https://edubridge-client.vercel.app",
-    process.env.APP_URL || "https://edubridge-client.vercel.app",  // Fallback
-  ],
+    process.env.APP_URL || "https://edubridge-client.vercel.app",
+  ].filter(Boolean) as string[],
 
   user: {
     additionalFields: {
@@ -37,16 +36,22 @@ export const auth = betterAuth({
     },
   },
 
-  // ✅ Session configuration
   session: {
     cookieCache: {
       enabled: true,
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 24 * 7,
     },
   },
 
-  // ✅ REMOVED: advanced.cookieOptions (not supported in this version)
-  // Better Auth handles cookies automatically with session config
+  // ✅ SameSite=None — cross-origin cookie allow করবে
+  advanced: {
+    defaultCookieAttributes: {
+      secure: true,
+      httpOnly: true,
+      sameSite: "none",
+      partitioned: true,
+    },
+  },
 });
 
 
