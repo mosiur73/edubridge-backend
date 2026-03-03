@@ -9,7 +9,7 @@ async function seedAdmin() {
         console.log('******Admin sending started');
         const adminDate={
             name: "Admin",
-            email:"admin2@gmail.com",
+            email:"admin@gmail.com",
             role:UserRole.ADMIN,
             password:"admin12345",
          

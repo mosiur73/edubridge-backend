@@ -11,10 +11,37 @@ import { adminRouter } from "./modules/admin/admin.routes";
 
 const app: Application = express();
 
+// app.use(cors({
+//     origin: process.env.APP_URL || "http://localhost:3000", 
+//     credentials: true
+// }))
+// ✅ FIXED CORS - Allow multiple origins
+const allowedOrigins = [
+    'http://localhost:3000',                          // Local dev
+    'https://edubridge-client.vercel.app',           // Production
+    'https://edubridge-client-git-main-mosiurs-projects-799abad9.vercel.app',  // Git branch
+];
+
 app.use(cors({
-    origin: process.env.APP_URL || "http://localhost:3000", 
-    credentials: true
-}))
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like Postman, mobile apps)
+        if (!origin) return callback(null, true);
+        
+        // Check if origin is in allowed list or matches pattern
+        const isAllowed = allowedOrigins.some(allowed => origin === allowed) || 
+                         origin?.includes('edubridge-client') && origin?.includes('vercel.app');
+        
+        if (isAllowed) {
+            callback(null, true);
+        } else {
+            console.log('CORS blocked origin:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+}));
 
 app.use(express.json());
 
