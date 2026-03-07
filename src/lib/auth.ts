@@ -7,14 +7,11 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
 
-  // ✅ CRITICAL: Allow both origins
   trustedOrigins: [
     "http://localhost:3000",
     "https://edubridge-client.vercel.app",
-  ],
-
-  // ✅ Base URL for backend
-  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:5000",
+    process.env.APP_URL || "https://edubridge-client.vercel.app",
+  ].filter(Boolean) as string[],
 
   user: {
     additionalFields: {
@@ -39,13 +36,20 @@ export const auth = betterAuth({
     },
   },
 
-  // ✅ CRITICAL: Session configuration
   session: {
-    expiresIn: 60 * 60 * 24 * 7, // 7 days
-    updateAge: 60 * 60 * 24, // Update every day
     cookieCache: {
       enabled: true,
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 24 * 7,
+    },
+  },
+
+  
+  advanced: {
+    defaultCookieAttributes: {
+      secure: true,
+      httpOnly: true,
+      sameSite: "none",
+      partitioned: true,
     },
   },
 });
