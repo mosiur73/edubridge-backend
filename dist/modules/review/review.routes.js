@@ -42,4 +42,3 @@ router.get("/tutor/:tutorId", review_controller_1.reviewController.getTutorRevie
 router.post("/", (0, auth_1.default)(auth_1.UserRole.STUDENT), review_controller_1.reviewController.createReview);
 //review update korte hobe
 exports.reviewRouter = router;
-//# sourceMappingURL=review.routes.js.map

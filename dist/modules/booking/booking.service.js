@@ -304,4 +304,3 @@ exports.bookingService = {
     markComplete,
     cancelBooking,
 };
-//# sourceMappingURL=booking.service.js.map

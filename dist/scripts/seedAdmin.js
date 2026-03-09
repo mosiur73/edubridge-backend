@@ -45,4 +45,3 @@ async function seedAdmin() {
     }
 }
 seedAdmin();
-//# sourceMappingURL=seedAdmin.js.map

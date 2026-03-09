@@ -21,4 +21,3 @@ const getAllCategories = async (req, res) => {
 exports.categoryController = {
     getAllCategories,
 };
-//# sourceMappingURL=category.controller.js.map

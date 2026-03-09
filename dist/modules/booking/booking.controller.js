@@ -111,4 +111,3 @@ exports.bookingController = {
     markBookingComplete,
     cancelBooking,
 };
-//# sourceMappingURL=booking.controller.js.map

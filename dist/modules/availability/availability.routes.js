@@ -43,4 +43,3 @@ router.post("/", (0, auth_1.default)(auth_1.UserRole.TUTOR), availability_contro
 router.put("/:id", (0, auth_1.default)(auth_1.UserRole.TUTOR), availability_controller_1.availabilityController.updateAvailability); //ok
 router.delete("/:id", (0, auth_1.default)(auth_1.UserRole.TUTOR), availability_controller_1.availabilityController.deleteAvailability); //ok
 exports.availabilityRouter = router;
-//# sourceMappingURL=availability.routes.js.map

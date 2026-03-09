@@ -152,4 +152,3 @@ exports.tutorController = {
     getStats,
     getMySessions,
 };
-//# sourceMappingURL=tutor.controller.js.map

@@ -55,4 +55,3 @@ app.get("/", (req, res) => {
     res.send("edu-bridge server is running");
 });
 exports.default = app;
-//# sourceMappingURL=app.js.map

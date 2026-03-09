@@ -53,4 +53,3 @@ router.get("/categories", admin_controller_1.adminController.getAllCategories);
 router.post("/categories", admin_controller_1.adminController.createCategory); //Extra
 router.put("/categories/:id", admin_controller_1.adminController.updateCategory); //Extra
 exports.adminRouter = router;
-//# sourceMappingURL=admin.routes.js.map

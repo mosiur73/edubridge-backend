@@ -44,4 +44,3 @@ router.post("/", (0, auth_1.default)(auth_1.UserRole.STUDENT), booking_controlle
 router.patch("/:id/complete", (0, auth_1.default)(auth_1.UserRole.TUTOR), booking_controller_1.bookingController.markBookingComplete);
 router.patch("/:id/cancel", (0, auth_1.default)(auth_1.UserRole.STUDENT, auth_1.UserRole.TUTOR), booking_controller_1.bookingController.cancelBooking);
 exports.bookingRouter = router;
-//# sourceMappingURL=booking.routes.js.map

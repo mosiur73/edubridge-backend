@@ -48,4 +48,3 @@ const auth = (...roles) => {
     };
 };
 exports.default = auth;
-//# sourceMappingURL=auth.js.map

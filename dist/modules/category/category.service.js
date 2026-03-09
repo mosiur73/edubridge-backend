@@ -15,4 +15,3 @@ const getAllCategories = async () => {
 exports.categoryService = {
     getAllCategories,
 };
-//# sourceMappingURL=category.service.js.map

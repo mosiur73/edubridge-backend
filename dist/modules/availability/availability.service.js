@@ -164,4 +164,3 @@ exports.availabilityService = {
     updateAvailability,
     deleteAvailability
 };
-//# sourceMappingURL=availability.service.js.map

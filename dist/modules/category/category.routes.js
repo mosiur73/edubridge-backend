@@ -7,4 +7,3 @@ const router = (0, express_1.Router)();
 // Public route - Get all categories
 router.get("/", category_controller_1.categoryController.getAllCategories);
 exports.categoryRouter = router;
-//# sourceMappingURL=category.routes.js.map

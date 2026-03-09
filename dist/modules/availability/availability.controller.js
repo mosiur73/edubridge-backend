@@ -82,4 +82,3 @@ exports.availabilityController = {
     updateAvailability,
     deleteAvailability,
 };
-//# sourceMappingURL=availability.controller.js.map

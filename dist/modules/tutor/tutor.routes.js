@@ -58,4 +58,3 @@ router.get("/:id", tutor_controller_1.tutorController.getTutorById);
 // router.get("/", tutorController.getAllTutors);
 // router.get("/:id", tutorController.getTutorById);
 exports.tutorRouter = router;
-//# sourceMappingURL=tutor.routes.js.map

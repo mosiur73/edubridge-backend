@@ -24,7 +24,10 @@ const getStats = async () => {
         where: { status: "COMPLETED" },
         select: { price: true },
     });
-    const totalRevenue = completedBookingsData.reduce((sum, booking) => sum + booking.price, 0);
+    // const totalRevenue = completedBookingsData.reduce(
+    //   (sum, booking) => sum + booking.price,
+    //   0
+    // );
     // Get total reviews
     const totalReviews = await prisma_1.prisma.review.count();
     return {
@@ -34,7 +37,7 @@ const getStats = async () => {
             totalTutors,
             totalAdmins,
             totalBookings,
-            totalRevenue: Number(totalRevenue.toFixed(2)),
+            // totalRevenue: Number(totalRevenue.toFixed(2)),
             totalReviews,
         },
         bookings: {
@@ -254,4 +257,3 @@ exports.adminService = {
     banUser,
     unbanUser,
 };
-//# sourceMappingURL=admin.service.js.map

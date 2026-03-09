@@ -185,4 +185,3 @@ exports.adminController = {
     banUser,
     unbanUser,
 };
-//# sourceMappingURL=admin.controller.js.map

@@ -63,4 +63,3 @@ exports.reviewController = {
     createReview,
     getTutorReviews,
 };
-//# sourceMappingURL=review.controller.js.map
