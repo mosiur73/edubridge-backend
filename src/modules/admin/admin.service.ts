@@ -25,10 +25,10 @@ const getStats = async () => {
     select: { price: true },
   });
 
-  const totalRevenue = completedBookingsData.reduce(
-    (sum, booking) => sum + booking.price,
-    0
-  );
+  // const totalRevenue = completedBookingsData.reduce(
+  //   (sum, booking) => sum + booking.price,
+  //   0
+  // );
 
   // Get total reviews
   const totalReviews = await prisma.review.count();
@@ -40,7 +40,7 @@ const getStats = async () => {
       totalTutors,
       totalAdmins,
       totalBookings,
-      totalRevenue: Number(totalRevenue.toFixed(2)),
+      // totalRevenue: Number(totalRevenue.toFixed(2)),
       totalReviews,
     },
     bookings: {
