@@ -11,7 +11,7 @@ import { adminRouter } from "./modules/admin/admin.routes";
 
 const app: Application = express();
 
-// ✅ CORS — production + vercel preview deployments allow করবে
+
 const allowedOrigins = [
   process.env.APP_URL || "http://localhost:3000",
   process.env.PROD_APP_URL,
@@ -24,8 +24,7 @@ app.use(
 
       const isAllowed =
         allowedOrigins.includes(origin) ||
-        /^https:\/\/.*\.vercel\.app$/.test(origin); // যেকোনো Vercel deployment
-
+        /^https:\/\/.*\.vercel\.app$/.test(origin); 
       if (isAllowed) {
         callback(null, true);
       } else {
