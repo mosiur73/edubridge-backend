@@ -9,9 +9,7 @@ export const auth = betterAuth({
 
   trustedOrigins: [
     "http://localhost:3000",
-    "https://edubridge-client.vercel.app",
-    process.env.APP_URL || "https://edubridge-client.vercel.app",
-  ].filter(Boolean) as string[],
+  ],
 
   user: {
     additionalFields: {
@@ -36,19 +34,4 @@ export const auth = betterAuth({
     },
   },
 
-  session: {
-    cookieCache: {
-      enabled: true,
-      maxAge: 5 * 60,
-    },
-  },
-
-  advanced: {
-    cookiePrefix: "better-auth",
-    useSecureCookies: true,
-    crossSubDomainCookies: {
-      enabled: false,
-    },
-    disableCSRFCheck: true,
-  },
 });
