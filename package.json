@@ -4,10 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx tsx watch src/server.ts",
-    "seed:admin": "npx tsx src/scripts/seedAdmin.ts"
-   
+     "dev": "tsx watch src/server.ts",
+    "build": "prisma generate && tsc && node scripts/fix-imports.js",
+     "build:tsup": "tsup",
+    "start": "node dist/server.js",
+    "lint": "eslint ./src/**/*",
+    "migrate": "prisma migrate dev",
+    "generate": "prisma generate",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",

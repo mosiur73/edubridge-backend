@@ -12,32 +12,10 @@ import { adminRouter } from "./modules/admin/admin.routes";
 const app: Application = express();
 
 
-const allowedOrigins = [
-  process.env.APP_URL || "http://localhost:3000",
-  process.env.PROD_APP_URL,
-].filter(Boolean) as string[];
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-
-      const isAllowed =
-        allowedOrigins.includes(origin) ||
-        /^https:\/\/.*\.vercel\.app$/.test(origin); 
-      if (isAllowed) {
-        callback(null, true);
-      } else {
-        console.log("CORS blocked origin:", origin);
-        callback(new Error(`Origin ${origin} not allowed by CORS`));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
-    exposedHeaders: ["Set-Cookie"],
-  })
-);
+app.use(cors({
+    origin:process.env.FRONTEND_URL || "http://localhost:3000",  //client side url
+    credentials:true
+}))
 
 app.use(express.json());
 

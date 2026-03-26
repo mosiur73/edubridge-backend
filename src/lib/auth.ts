@@ -1,15 +1,15 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
-
+import { oAuthProxy } from "better-auth/plugins";
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
 
-  trustedOrigins: [
-    "http://localhost:3000",
-  ],
+    baseURL: process.env.FRONTEND_URL,
+  trustedOrigins: [process.env.FRONTEND_URL!],
+
 
   user: {
     additionalFields: {
@@ -33,5 +33,32 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
+
+
+  // account: { skipStateCookieCheck: true }, // solved redirect issue
+  advanced: {
+    cookies: {
+      session_token: {
+        name: "session_token", // Force this exact name
+        attributes: {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          partitioned: true,
+        },
+      },
+      state: {
+        name: "session_token", // Force this exact name
+        attributes: {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          partitioned: true,
+        },
+      },
+    },
+  },
+
+  plugins: [oAuthProxy()],
 
 });
