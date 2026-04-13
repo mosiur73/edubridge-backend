@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { adminService } from "./admin.service";
 
-// GET /api/admin/stats - Platform statistics
+
 const getStats = async (req: Request, res: Response) => {
   try {
     const stats = await adminService.getStats();
@@ -18,7 +18,7 @@ const getStats = async (req: Request, res: Response) => {
   }
 };
 
-// GET /api/admin/users - Get all users
+
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const { role, search } = req.query;
@@ -40,7 +40,7 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-// GET /api/admin/bookings - Get all bookings
+
 const getAllBookings = async (req: Request, res: Response) => {
   try {
     const { status } = req.query;
