@@ -3,7 +3,7 @@ import { prisma } from "../../lib/prisma";
 const createAvailability = async (userId: string, payload: any) => {
   const { dayOfWeek, startTime, endTime } = payload;
 
-  // Get tutor profile
+ 
   const tutorProfile = await prisma.tutorProfile.findUnique({
     where: { userId },
   });
@@ -12,7 +12,7 @@ const createAvailability = async (userId: string, payload: any) => {
     throw new Error("Tutor profile not found");
   }
 
-  // Validate day of week (0-6)
+  
   if (dayOfWeek < 0 || dayOfWeek > 6) {
     throw new Error("Day of week must be between 0 (Sunday) and 6 (Saturday)");
   }

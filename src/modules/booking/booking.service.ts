@@ -16,7 +16,7 @@ const createBooking = async (studentId: string, payload: any) => {
     throw new Error("Tutor is not available for bookings");
   }
 
-  // Check if booking date is in the future
+ 
   const bookingDate = new Date(date);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -220,7 +220,6 @@ const markComplete = async (bookingId: string, userId: string) => {
     throw new Error("Booking not found");
   }
 
-  // Check if booking belongs to this tutor
   if (booking.tutorId !== tutorProfile.id) {
     throw new Error("You do not have permission to update this booking");
   }
@@ -230,7 +229,7 @@ const markComplete = async (bookingId: string, userId: string) => {
     throw new Error("Only confirmed bookings can be marked as completed");
   }
 
-  // Update booking status
+ 
   const updatedBooking = await prisma.booking.update({
     where: { id: bookingId },
     data: { status: "COMPLETED" },
@@ -278,7 +277,7 @@ const cancelBooking = async (bookingId: string, userId: string, userRole: string
     throw new Error("Booking not found");
   }
 
-  // Check permissions
+  
   let hasPermission = false;
 
   if (userRole === "STUDENT" && booking.studentId === userId) {
@@ -305,7 +304,7 @@ const cancelBooking = async (bookingId: string, userId: string, userRole: string
     throw new Error("Cannot cancel completed bookings");
   }
 
-  // Update booking status
+  
   const updatedBooking = await prisma.booking.update({
     where: { id: bookingId },
     data: { status: "CANCELLED" },

@@ -77,7 +77,7 @@ const getMyProfile = async (req: Request, res: Response) => {
   }
 };
 
-// POST /api/tutor/profile - Create tutor profile
+
 const createProfile = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id;
@@ -122,7 +122,7 @@ const updateProfile = async (req: Request, res: Response) => {
   }
 };
 
-// GET /api/tutor/stats - Get tutor statistics
+
 const getStats = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id;
@@ -140,7 +140,7 @@ const getStats = async (req: Request, res: Response) => {
   }
 };
 
-// GET /api/tutor/sessions - Get tutor sessions
+
 const getMySessions = async (req: Request, res: Response) => {
   try {
     const userId = req.user!.id;
