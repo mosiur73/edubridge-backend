@@ -1,7 +1,6 @@
 generator client {
   provider = "prisma-client"
-  // output   = "../generated/prisma"
-    output   = "../src/generated"
+  output   = "../src/generated"
 }
 
 datasource db {
@@ -15,9 +14,17 @@ enum Role {
 }
 
 enum BookingStatus {
+  PENDING
   CONFIRMED
   COMPLETED
   CANCELLED
+}
+
+// ✅ New payment status enum
+enum PaymentStatus {
+  UNPAID
+  PAID
+  REFUNDED
 }
 
 model User {
@@ -28,7 +35,6 @@ model User {
   image         String?
   role          Role      @default(STUDENT)
 
-  // ✅ Ban fields
   banned        Boolean   @default(false)
   banReason     String?
   banExpires    DateTime?
@@ -60,7 +66,6 @@ model Session {
   @@map("session")
 }
 
-
 model Account {
   id                    String   @id @default(cuid())
   accountId             String
@@ -84,7 +89,6 @@ model Account {
   @@map("account")
 }
 
-
 model Verification {
   id         String   @id @default(cuid())
   identifier String
@@ -97,8 +101,6 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
-
-
 
 model TutorProfile {
   id            String   @id @default(cuid())
@@ -129,7 +131,6 @@ model TutorProfile {
   @@map("tutor_profile")
 }
 
-
 model Category {
   id          String   @id @default(cuid())
   name        String   @unique
@@ -143,23 +144,26 @@ model Category {
   @@map("category")
 }
 
-
 model Booking {
-  id          String        @id @default(cuid())
-  studentId   String
-  student     User          @relation("StudentBookings", fields: [studentId], references: [id], onDelete: Cascade)
-  tutorId     String
-  tutor       TutorProfile  @relation(fields: [tutorId], references: [id], onDelete: Cascade)
-  subject     String        
-  date        DateTime      
-  startTime   String        
-  endTime     String        
-  duration    Int?          
-  status      BookingStatus @default(CONFIRMED)
-  price       Float
-  notes       String?       @db.Text
-  meetingLink String?       
+  id               String        @id @default(cuid())
+  studentId        String
+  student          User          @relation("StudentBookings", fields: [studentId], references: [id], onDelete: Cascade)
+  tutorId          String
+  tutor            TutorProfile  @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+  subject          String        
+  date             DateTime      
+  startTime        String        
+  endTime          String        
+  duration         Int?          
+  status           BookingStatus @default(PENDING)
+  price            Float
+  notes            String?       @db.Text
+  meetingLink      String?       
 
+  // ✅ Payment fields
+  paymentStatus    PaymentStatus @default(UNPAID)
+  paymentIntentId  String?       @unique
+  
   review      Review?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -170,8 +174,6 @@ model Booking {
   @@index([status])
   @@map("booking")
 }
-
-
 
 model Review {
   id        String   @id @default(cuid())
@@ -192,8 +194,6 @@ model Review {
   @@map("review")
 }
 
-
-
 model Availability {
   id        String   @id @default(cuid())
   tutorId   String
@@ -210,3 +210,4 @@ model Availability {
   @@index([dayOfWeek])
   @@map("availability")
 }
+

@@ -9,6 +9,7 @@ import { availabilityRouter } from "./modules/availability/availability.routes";
 import { categoryRouter } from "./modules/category/category.routes";
 import { adminRouter } from "./modules/admin/admin.routes";
 import userRouter from "./app/modules/user/user.router";
+import { paymentRouter } from "./modules/payment/payment.routes";
 
 const app: Application = express();
 
@@ -32,6 +33,7 @@ app.use("/api/reviews", reviewRouter);
 app.use("/api/availability", availabilityRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/payment", paymentRouter); // ✅ New
 
 app.get("/", (req, res) => {
   res.send("edu-bridge server is running");
